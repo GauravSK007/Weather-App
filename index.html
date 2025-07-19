@@ -6,6 +6,33 @@
     <title>Document</title>
 </head>
 <body>
+
+    <div>
+        <h1 id="content">
+
+        </h1>
+        <button id="but">
+            Click Me
+        </button>
+    </div>
     
+<script>
+    let response;
+    let data;
+
+    async function getdata() {
+        console.log("fetching data...")
+        response = await fetch("https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&current_weather=true")
+        console.log("Data fetched!!")
+        console.log("converting data to json...")
+        data = await response.json()
+        console.log("data converted sucessfully!!")
+        let weather = data.current_weather
+        let h = document.querySelector("#content")
+        h.innerHTML = weather.temperature
+    }
+    document.querySelector("#but").addEventListener('click', getdata)
+
+</script>
 </body>
 </html>
