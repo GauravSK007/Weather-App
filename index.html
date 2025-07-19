@@ -1,38 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Document</title>
-</head>
-<body>
 
-    <div>
-        <h1 id="content">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <nav
+      class="h-[80px] w-full bg-blue-500 text-white flex items-center justify-between">
+      <h1 class="text-[32px] mx-[20px] font-bold hover:[text-shadow:0px_0px_8px_rgba(255,255,255,0.5)]">MyWeather</h1>
+      <form action="">
+        <input
+          type="text"
+          placeholder="Location..."
+          class="h-[40px] w-[280px] px-4 text-gray-500 rounded-md border border-gray-300 shadow-sm placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-        </h1>
-        <button id="but">
-            Click Me
-        </button>
-    </div>
-    
-<script>
-    let response;
-    let data;
+        <button class="mx-[10px] h-[38px] px-[5px] bg-white rounded-md text-blue-500 hover:bg-blue-700 hover:text-white">Search</button>
+      </form>
+      <div class="mx-[20px] h-[50px] w-[50px] bg-white rounded-full flex items-center justify-center">
+      <button class=" text-[32px]">🌙</button>
+      </div>
+    </nav>
 
-    async function getdata() {
-        console.log("fetching data...")
-        response = await fetch("https://api.open-meteo.com/v1/forecast?latitude=28.6139&longitude=77.2090&current_weather=true")
-        console.log("Data fetched!!")
-        console.log("converting data to json...")
-        data = await response.json()
-        console.log("data converted sucessfully!!")
-        let weather = data.current_weather
-        let h = document.querySelector("#content")
-        h.innerHTML = weather.temperature
-    }
-    document.querySelector("#but").addEventListener('click', getdata)
+    <main>
+      
+    </main>
 
-</script>
-</body>
+    <script>
+      async function getweatherdata() {
+        let locationResponse;
+        let weatherResponse;
+        let weatherdata;
+        let locationData;
+        let latitude;
+        let longitude;
+
+        //fetching loction through IP
+        locationResponse = await fetch("https://ipinfo.io/json");
+        locationData = await locationResponse.json();
+
+        //city
+        let city = locationData.city;
+
+        //extract coordinates
+        latitude = locationData.loc.split(",")[0];
+        longitude = locationData.loc.split(",")[1];
+
+        //fetching weather data
+        weatherResponse = await fetch(
+          `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`
+        );
+        weatherdata = await weatherResponse.json();
+
+        //imp data
+        let weather = weatherdata.current_weather;
+        let weekWeather = weatherdata.daily;
+
+        let windspeed = weather.windspeed;
+        let isday = weather.is_day;
+        let weathercode = weather.weathercode;
+
+        let dates = weekWeather.time;
+        let maxTemp = weekWeather.temperature_2m_max;
+        let minTemp = weekWeather.temperature_2m_min;
+        let rain = weekWeather.precipitation_probability_max;
+      }
+    </script>
+  </body>
 </html>
