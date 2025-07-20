@@ -43,13 +43,23 @@
       </div>
     </nav>
 
-    <main>
+    <main class="flex">
+      <div
+        class="mx-auto mt-10 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-8 flex flex-col items-center justify-center gap-6 w-full max-w-md transition-colors duration-300">
+        <h1
+          class="text-[30px] font-extrabold text-gray-800 dark:text-gray-100 tracking-wide mb-2">
+          Weather This Week 🌤️
+        </h1>
+        <table
+          id="forecastTable"
+          class="w-full text-center rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"></table>
+      </div>
       <div
         class="mx-auto mt-10 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-8 flex flex-col items-center gap-6 w-full max-w-md transition-colors duration-300">
         <div id="code" class="text-[120px] drop-shadow-lg">🌤️</div>
         <h1
           id="city"
-          class="text-[40px] font-extrabold text-gray-800 dark:text-gray-100 tracking-wide mb-2">
+          class="text-[40px] text-center font-extrabold text-gray-800 dark:text-gray-100 tracking-wide mb-2">
           Delhi
         </h1>
         <p
@@ -67,6 +77,28 @@
           id="rain"
           class="text-[16px] text-blue-700 dark:text-blue-200 bg-blue-100 dark:bg-blue-900 rounded-lg px-4 py-2 shadow-sm">
           There's an 80% chance of rain—better carry an umbrella!
+        </p>
+      </div>
+      <div
+        class="mx-auto mt-10 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-8 flex flex-col items-center justify-center gap-6 w-full max-w-md transition-colors duration-300">
+        <h1
+          class="text-[28px] font-bold text-blue-700 dark:text-blue-300 tracking-wide mb-2 flex items-center gap-2">
+          <span class="text-[32px]">🕒</span> Local Time
+        </h1>
+        <p
+          id="localTime"
+          class="text-[28px] font-semibold text-gray-800 dark:text-gray-100 mb-4">
+          12:00 PM
+        </p>
+        <h2
+          class="text-[22px] font-semibold text-blue-600 dark:text-blue-200 tracking-wide mb-2 mt-4 flex items-center gap-2">
+          <span class="text-[28px]">💭</span> Sky Says...
+        </h2>
+        <p
+          id="skySays"
+          class="text-[18px] text-gray-700 dark:text-gray-300 text-center leading-relaxed bg-blue-50 dark:bg-gray-900 rounded-lg px-4 py-3  shadow-sm">
+          The weather is looking great this week! Expect a mix of sunshine and
+          clouds with mild temperatures.
         </p>
       </div>
     </main>
@@ -99,6 +131,7 @@
         //city
         let city = locationData.city;
         let region = locationData.region;
+        let timezone = locationData.timezone;
 
         //extract coordinates
         latitude = locationData.loc.split(",")[0];
@@ -172,14 +205,70 @@
           return emojiMap[code] || "❓";
         }
 
-        let emojiC = getWeatherEmoji(weathercode, isday)
-        document.getElementById('code').innerText = emojiC;
+        let emojiC = getWeatherEmoji(weathercode, isday);
+        document.getElementById("code").innerText = emojiC;
+
+        let tableHTML = `
+  <thead class="bg-blue-500 dark:bg-gray-900 text-white">
+    <tr>
+      <th class="py-2 px-3 font-semibold">Date</th>
+      <th class="py-2 px-3 font-semibold">Min Temp</th>
+      <th class="py-2 px-3 font-semibold">Max Temp</th>
+      <th class="py-2 px-3 font-semibold">Rain Chance</th>
+    </tr>
+  </thead>
+  <tbody>
+`;
+
+        for (let i = 1; i < dates.length; i++) {
+          tableHTML += `
+      <tr class="hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors">
+        <td class="py-2 h-[50px] w-[100px] text-gray-700 dark:text-gray-200">${dates[i]}</td>
+        <td class="py-2 px-3 text-gray-700 dark:text-gray-200">${minTemp[i]}°C</td>
+        <td class="py-2 px-3 text-gray-700 dark:text-gray-200">${maxTemp[i]}°C</td>
+        <td class="py-2 px-3 text-gray-700 dark:text-gray-200">${rain[i]}%</td>
+      </tr>
+    `;
+        }
+
+        tableHTML += `</tbody>`;
+
+        document.querySelector("#forecastTable").innerHTML = tableHTML;
+
+        // Displaying local time
+        let localTime = document.getElementById("localTime");
+        function showClock() {
+          const time = new Date().toLocaleTimeString("en-US", {
+            timeZone: timezone,
+            hour12: true, 
+          });
+
+          localTime.innerText = time;
+        }
+        setInterval(showClock, 1000);
+        showClock();
 
 
       }
 
       //calling main async function
       getweatherdata();
+      const factsAndQuotes = [
+        "Some people feel the rain, others just get wet. – Bob Marley. It’s not about the weather, it’s about your mindset.",
+        "Wherever you go, no matter what the weather, always bring your own sunshine. – Anthony J. D'Angelo. Positivity changes everything.",
+        "Sunshine is delicious, rain is refreshing, wind braces us up, and snow is exhilarating. There is really no such thing as bad weather. – John Ruskin",
+        "After rain comes sunshine. Every storm runs out of rain eventually. – Old Proverb",
+        "Raindrops aren’t actually tear-shaped—they form more like burger buns when falling due to air resistance.",
+        "The highest temperature ever recorded on Earth was 56.7°C in Death Valley, USA, back in 1913—a record that still stands over a century later.",
+        "Lightning is about five times hotter than the surface of the sun, reaching temperatures of up to 30,000°C in just a split second.",
+        "It rains more frequently in London than Mumbai, but Mumbai gets more rainfall overall—London just spreads it out over more days.",
+        "A single lightning bolt can contain up to one billion volts of electricity, enough to toast 100,000 slices of bread at once!",
+        "Snowflakes are not all unique! Scientists have actually found identical snowflakes under controlled lab conditions, although it's super rare.",
+      ];
+
+      let skySays = document.getElementById("skySays");
+      skySays.innerText =
+        factsAndQuotes[Math.floor(Math.random() * factsAndQuotes.length)];
     </script>
   </body>
 </html>
