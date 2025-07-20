@@ -5,9 +5,9 @@ const html = document.documentElement;
 themeButtonMobile.addEventListener("click", () => {
   html.classList.toggle("dark");
   if (html.classList.contains("dark")) {
-    themeButton.textContent = "☀"; 
+    themeButtonMobile.textContent = "☀"; 
   } else {
-    themeButton.textContent = "🌙"; 
+    themeButtonMobile.textContent = "🌙"; 
   }
 });
 
