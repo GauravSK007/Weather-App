@@ -29,10 +29,12 @@
       <form action="">
         <input
           type="text"
+          id="cityInput"
           placeholder="Location..."
           class="h-[40px] w-[280px] px-4 text-gray-500 dark:text-gray-700 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-700" />
 
         <button
+          id="searchButton"
           class="mx-[10px] h-[38px] px-[5px] bg-white dark:bg-gray-800 rounded-md text-blue-500 dark:text-blue-300 hover:bg-blue-700 dark:hover:bg-gray-700 hover:text-white dark:hover:text-blue-200 transition-colors duration-300">
           Search
         </button>
@@ -96,7 +98,7 @@
         </h2>
         <p
           id="skySays"
-          class="text-[18px] text-gray-700 dark:text-gray-300 text-center leading-relaxed bg-blue-50 dark:bg-gray-900 rounded-lg px-4 py-3  shadow-sm">
+          class="text-[18px] text-gray-700 dark:text-gray-300 text-center leading-relaxed bg-blue-50 dark:bg-gray-900 rounded-lg px-4 py-3 shadow-sm">
           The weather is looking great this week! Expect a mix of sunshine and
           clouds with mild temperatures.
         </p>
@@ -115,6 +117,8 @@
           themeButton.textContent = "🌙"; // Change to moon icon
         }
       });
+
+      let intervalId = null;
 
       async function getweatherdata() {
         let locationResponse;
@@ -240,15 +244,13 @@
         function showClock() {
           const time = new Date().toLocaleTimeString("en-US", {
             timeZone: timezone,
-            hour12: true, 
+            hour12: true,
           });
 
           localTime.innerText = time;
         }
-        setInterval(showClock, 1000);
+        intervalId = setInterval(showClock, 1000);
         showClock();
-
-
       }
 
       //calling main async function
@@ -269,6 +271,146 @@
       let skySays = document.getElementById("skySays");
       skySays.innerText =
         factsAndQuotes[Math.floor(Math.random() * factsAndQuotes.length)];
+
+      //Search functionality
+      let cityInput = document.getElementById("cityInput");
+      let searchButton = document.getElementById("searchButton");
+      searchButton.addEventListener("click", async (e) => {
+        e.preventDefault();
+        let city = cityInput.value.trim();
+        if (city) {
+          try {
+            let cityResponse = await fetch(
+              `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`
+            );
+            let cityData = await cityResponse.json();
+            //fetching weather data
+
+            let citylatitude = cityData.results[0].latitude;
+            let citylongitude = cityData.results[0].longitude;
+            let citytimezone = cityData.results[0].timezone;
+            let cityname = cityData.results[0].name;
+            let region = cityData.results[0].admin1;
+
+            weatherResponse = await fetch(
+              `https://api.open-meteo.com/v1/forecast?latitude=${citylatitude}&longitude=${citylongitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`
+            );
+            weatherdata = await weatherResponse.json();
+
+            //imp data
+            let weather = weatherdata.current_weather;
+            let weekWeather = weatherdata.daily;
+
+            let temperature = weather.temperature;
+            let windspeed = weather.windspeed;
+            let isday = weather.is_day;
+            let weathercode = weather.weathercode;
+
+            let dates = weekWeather.time;
+            let maxTemp = weekWeather.temperature_2m_max;
+            let minTemp = weekWeather.temperature_2m_min;
+            let rain = weekWeather.precipitation_probability_max;
+
+            //displaying data
+            document.getElementById("city").innerText =
+              city == region ? cityname : `${cityname}, ${region}`;
+            document.getElementById("temperature").innerText =
+              temperature + "°C";
+            document.getElementById(
+              "min-max"
+            ).innerHTML = `<span class="font-medium">Min:</span> ${minTemp[0]}°C &nbsp;&nbsp; <span class="font-medium">Max:</span> ${maxTemp[0]}°C`;
+            document.getElementById("rain").innerText =
+              rain[0] > 50
+                ? `There's an ${rain[0]}% chance of rain—better carry an umbrella!`
+                : `There's an ${rain[0]}% chance of rain.`;
+
+            //displaying emoji for codes
+            function getWeatherEmoji(code, isDay) {
+              const emojiMap = {
+                0: isDay === 1 ? "☀️" : "🌙",
+                1: isDay === 1 ? "🌤️" : "🌙☁️",
+                2: isDay === 1 ? "⛅" : "☁️🌙",
+                3: "☁️",
+                45: "🌫️",
+                48: "🌫️",
+                51: isDay === 1 ? "🌦️" : "🌧️",
+                53: isDay === 1 ? "🌦️" : "🌧️",
+                55: isDay === 1 ? "🌦️" : "🌧️",
+                56: "🧊🌧️",
+                57: "🧊🌧️",
+                61: "🌧️",
+                63: "🌧️",
+                65: "🌧️",
+                66: "🧊🌧️",
+                67: "🧊🌧️",
+                71: "❄️",
+                73: "❄️",
+                75: "❄️",
+                77: "🌨️",
+                80: isDay === 1 ? "🌦️" : "🌧️",
+                81: isDay === 1 ? "🌦️" : "🌧️",
+                82: isDay === 1 ? "🌦️" : "🌧️",
+                85: "🌨️",
+                86: "🌨️",
+                95: "⛈️",
+                96: "⛈️🧊",
+                99: "⛈️🧊",
+              };
+
+              return emojiMap[code] || "❓";
+            }
+
+            let emojiC = getWeatherEmoji(weathercode, isday);
+            document.getElementById("code").innerText = emojiC;
+
+            let tableHTML = `
+  <thead class="bg-blue-500 dark:bg-gray-900 text-white">
+    <tr>
+      <th class="py-2 px-3 font-semibold">Date</th>
+      <th class="py-2 px-3 font-semibold">Min Temp</th>
+      <th class="py-2 px-3 font-semibold">Max Temp</th>
+      <th class="py-2 px-3 font-semibold">Rain Chance</th>
+    </tr>
+  </thead>
+  <tbody>
+`;
+
+            for (let i = 1; i < dates.length; i++) {
+              tableHTML += `
+      <tr class="hover:bg-blue-100 dark:hover:bg-gray-700 transition-colors">
+        <td class="py-2 h-[50px] w-[100px] text-gray-700 dark:text-gray-200">${dates[i]}</td>
+        <td class="py-2 px-3 text-gray-700 dark:text-gray-200">${minTemp[i]}°C</td>
+        <td class="py-2 px-3 text-gray-700 dark:text-gray-200">${maxTemp[i]}°C</td>
+        <td class="py-2 px-3 text-gray-700 dark:text-gray-200">${rain[i]}%</td>
+      </tr>
+    `;
+            }
+
+            tableHTML += `</tbody>`;
+
+            document.querySelector("#forecastTable").innerHTML = tableHTML;
+
+            clearInterval(intervalId);
+
+            // Displaying local time
+            let localTime = document.getElementById("localTime");
+            function showClock() {
+              const time = new Date().toLocaleTimeString("en-US", {
+                timeZone: citytimezone,
+                hour12: true,
+              });
+
+              localTime.innerText = time;
+            }
+            intervalId = setInterval(showClock, 1000);
+            showClock();
+          } catch (error) {
+            alert(error.message);
+          }
+        } else {
+          alert("Please enter a valid city name.");
+        }
+      });
     </script>
   </body>
 </html>
