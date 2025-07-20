@@ -1,28 +1,30 @@
-// Theme toggle functionality
+// Theme toggle functionality for mobile
 const themeButtonMobile = document.getElementById("theme-mobile");
 
 const html = document.documentElement;
 themeButtonMobile.addEventListener("click", () => {
   html.classList.toggle("dark");
   if (html.classList.contains("dark")) {
-    themeButton.textContent = "☀️"; // Change to sun icon
+    themeButton.textContent = "☀️"; 
   } else {
-    themeButton.textContent = "🌙"; // Change to moon icon
+    themeButton.textContent = "🌙"; 
   }
 });
 
+// Theme toggle functionality for dekstop
 const themeButtonDekstop = document.getElementById("theme-dekstop");
 themeButtonDekstop.addEventListener("click", () => {
   html.classList.toggle("dark");
   if (html.classList.contains("dark")) {
-    themeButtonDekstop.textContent = "☀️"; // Change to sun icon
+    themeButtonDekstop.textContent = "☀️";
   } else {
-    themeButtonDekstop.textContent = "🌙"; // Change to moon icon
+    themeButtonDekstop.textContent = "🌙"; 
   }
 });
 
-let intervalId = null;
+let intervalId = null; //interval to stop updating Local time.
 
+//async function for IP weather
 async function getweatherdata() {
   let locationResponse;
   let weatherResponse;
@@ -35,7 +37,7 @@ async function getweatherdata() {
   locationResponse = await fetch("https://ipinfo.io/json");
   locationData = await locationResponse.json();
 
-  //city
+  //city info
   let city = locationData.city;
   let region = locationData.region;
   let timezone = locationData.timezone;
@@ -115,6 +117,7 @@ async function getweatherdata() {
   let emojiC = getWeatherEmoji(weathercode, isday);
   document.getElementById("code").innerText = emojiC;
 
+  //displaying weekly weather table
   let tableHTML = `
   <thead class="bg-blue-500 dark:bg-gray-900 text-white">
     <tr>
@@ -158,6 +161,8 @@ async function getweatherdata() {
 
 //calling main async function
 getweatherdata();
+
+//Random facts and quotes
 const factsAndQuotes = [
   "Some people feel the rain, others just get wet. – Bob Marley. It’s not about the weather, it’s about your mindset.",
   "Wherever you go, no matter what the weather, always bring your own sunshine. – Anthony J. D'Angelo. Positivity changes everything.",
@@ -175,7 +180,7 @@ let skySays = document.getElementById("skySays");
 skySays.innerText =
   factsAndQuotes[Math.floor(Math.random() * factsAndQuotes.length)];
 
-//Search functionality
+//Search functionality and async function for search
 let cityInput = document.getElementById("cityInput");
 let searchButton = document.getElementById("searchButton");
 searchButton.addEventListener("click", async (e) => {
@@ -184,22 +189,24 @@ searchButton.addEventListener("click", async (e) => {
   if (city) {
     try {
 
+      // displaying loader.
       const loader = document.getElementById('loader');
       loader.classList.remove('hidden');
       loader.classList.add('flex');
 
+      // Fetching location info of provided city.
       let cityResponse = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`
       );
       let cityData = await cityResponse.json();
-      //fetching weather data
-
+      
       let citylatitude = cityData.results[0].latitude;
       let citylongitude = cityData.results[0].longitude;
       let citytimezone = cityData.results[0].timezone;
       let cityname = cityData.results[0].name;
       let region = cityData.results[0].admin1;
-
+      
+      //fetching weather data
       weatherResponse = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${citylatitude}&longitude=${citylongitude}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto`
       );
@@ -270,6 +277,7 @@ searchButton.addEventListener("click", async (e) => {
       let emojiC = getWeatherEmoji(weathercode, isday);
       document.getElementById("code").innerText = emojiC;
 
+      //displaying weekly weather table
       let tableHTML = `
   <thead class="bg-blue-500 dark:bg-gray-900 text-white">
     <tr>
@@ -297,7 +305,7 @@ searchButton.addEventListener("click", async (e) => {
 
       document.querySelector("#forecastTable").innerHTML = tableHTML;
 
-      clearInterval(intervalId);
+      clearInterval(intervalId); //Stoping previous Local Time
 
       // Displaying local time
       let localTime = document.getElementById("localTime");
@@ -311,9 +319,12 @@ searchButton.addEventListener("click", async (e) => {
       }
       intervalId = setInterval(showClock, 1000);
       showClock();
+
     } catch (error) {
       alert(error.message);
     }
+
+    //Removing Loader in Finally
     finally {
       const loader = document.getElementById('loader');
       loader.classList.add('hidden');
@@ -322,3 +333,5 @@ searchButton.addEventListener("click", async (e) => {
     alert("Please enter a valid city name.");
   }
 });
+
+//End of JS.

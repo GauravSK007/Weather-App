@@ -11,12 +11,14 @@
     </script>
     <title>MyWeather – Check Weather Instantly</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+
     <style>
       * {
         margin: 0;
         padding: 0;
         font-family: "Poppins", sans-serif;
       }
+      /* style for loader */
       /* From Uiverse.io by dovatgabriel */
       .newtons-cradle {
         --uib-size: 50px;
@@ -92,13 +94,19 @@
     </style>
   </head>
   <body class="dark:bg-gray-950 bg-white transition-colors duration-300">
+
+    <!-- Navbar -->
     <nav
       class="sticky h-auto w-full bg-blue-500 dark:bg-gray-900 text-white flex flex-col md:flex-row items-center justify-between transition-colors duration-300 px-4 py-3 gap-3 md:gap-0">
       <div class="flex w-full md:w-auto items-center justify-between">
+
+        <!-- Heading Text -->
         <h1
           class="text-[28px] md:text-[32px] font-bold hover:[text-shadow:0px_0px_8px_rgba(255,255,255,0.5)] dark:text-gray-100 transition-all duration-200 cursor-pointer">
           MyWeather
         </h1>
+
+        <!-- Theme button for moblie -->
         <div
           class="md:hidden h-[50px] w-[50px] flex items-center justify-center bg-white dark:bg-gray-800 rounded-full">
           <button
@@ -108,6 +116,8 @@
           </button>
         </div>
       </div>
+
+      <!-- Form  -->
       <form
         action=""
         class="flex flex-col md:flex-row items-center w-full md:w-auto gap-2 md:gap-0 mt-2 md:mt-0">
@@ -123,6 +133,8 @@
           Search
         </button>
       </form>
+
+      <!-- Theme button for desktop -->
       <div
         class="hidden md:flex mx-[20px] h-[50px] w-[50px] bg-white dark:bg-gray-800 rounded-full items-center justify-center transition-colors duration-300 hover:shadow-lg cursor-pointer">
         <button
@@ -132,7 +144,9 @@
         </button>
       </div>
     </nav>
+    <!-- NavBar Ends -->
 
+    <!-- Loader  -->
     <div
       id="loader"
       class="absolute top-0 left-0 w-screen h-screen bg-white/50 hidden items-center justify-center">
@@ -144,8 +158,12 @@
         <div class="newtons-cradle__dot"></div>
       </div>
     </div>
+    <!-- Loader Ends  -->
+
+    <!-- Main App  -->
     <main class="flex flex-col lg:flex-row p-4 gap-6">
-      <!-- Middle weather div first for mobile, reorder for desktop -->
+      
+      <!-- Main Weather Card -->
       <div
         class="order-1 lg:order-2 mx-auto mt-6 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-6 flex flex-col items-center gap-6 w-full max-w-md transition-colors duration-300 hover:shadow-xl">
         <div
@@ -175,6 +193,8 @@
           There's an 80% chance of rain—better carry an umbrella!
         </p>
       </div>
+
+      <!-- Weekly Weather Card  -->
       <div
         class="order-2 lg:order-1 mx-auto mt-6 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-6 flex flex-col items-center justify-center gap-6 w-full max-w-md transition-colors duration-300 hover:shadow-xl">
         <h1
@@ -187,6 +207,8 @@
             class="w-full text-center rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"></table>
         </div>
       </div>
+
+      <!-- Local time Card  -->
       <div
         class="order-3 mx-auto mt-6 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-6 flex flex-col items-center justify-center gap-6 w-full max-w-md transition-colors duration-300 hover:shadow-xl">
         <h1
@@ -210,6 +232,7 @@
         </p>
       </div>
     </main>
+    <!-- Main Ends  -->
 
     <script src="script.js"></script>
   </body>
