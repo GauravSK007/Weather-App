@@ -5,7 +5,7 @@ const html = document.documentElement;
 themeButtonMobile.addEventListener("click", () => {
   html.classList.toggle("dark");
   if (html.classList.contains("dark")) {
-    themeButton.textContent = "☀️"; 
+    themeButton.textContent = "☀"; 
   } else {
     themeButton.textContent = "🌙"; 
   }
@@ -16,7 +16,7 @@ const themeButtonDekstop = document.getElementById("theme-dekstop");
 themeButtonDekstop.addEventListener("click", () => {
   html.classList.toggle("dark");
   if (html.classList.contains("dark")) {
-    themeButtonDekstop.textContent = "☀️";
+    themeButtonDekstop.textContent = "☀";
   } else {
     themeButtonDekstop.textContent = "🌙"; 
   }
