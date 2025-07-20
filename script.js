@@ -183,6 +183,11 @@ searchButton.addEventListener("click", async (e) => {
   let city = cityInput.value.trim();
   if (city) {
     try {
+
+      const loader = document.getElementById('loader');
+      loader.classList.remove('hidden');
+      loader.classList.add('flex');
+
       let cityResponse = await fetch(
         `https://geocoding-api.open-meteo.com/v1/search?name=${city}&count=1`
       );
@@ -308,6 +313,10 @@ searchButton.addEventListener("click", async (e) => {
       showClock();
     } catch (error) {
       alert(error.message);
+    }
+    finally {
+      const loader = document.getElementById('loader');
+      loader.classList.add('hidden');
     }
   } else {
     alert("Please enter a valid city name.");
