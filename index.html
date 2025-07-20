@@ -19,86 +19,93 @@
       }
     </style>
   </head>
-  <body class="">
+  <body class="dark:bg-gray-950 bg-white transition-colors duration-300">
     <nav
-      class="h-[80px] w-full bg-blue-500 dark:bg-gray-900 text-white flex items-center justify-between transition-colors duration-300">
-      <h1
-        class="text-[32px] mx-[20px] font-bold hover:[text-shadow:0px_0px_8px_rgba(255,255,255,0.5)] dark:text-gray-100">
-        MyWeather
-      </h1>
-      <form action="">
+      class="h-auto w-full bg-blue-500 dark:bg-gray-900 text-white flex flex-col md:flex-row items-center justify-between transition-colors duration-300 px-4 py-3 gap-3 md:gap-0">
+      <div class="flex w-full md:w-auto items-center justify-between">
+        <h1
+          class="text-[28px] md:text-[32px] font-bold hover:[text-shadow:0px_0px_8px_rgba(255,255,255,0.5)] dark:text-gray-100 transition-all duration-200 cursor-pointer">
+          MyWeather
+        </h1>
+        <div class=" md:hidden h-[50px] w-[50px] flex items-center justify-center bg-white dark:bg-gray-800 rounded-full">
+          <button id="theme-mobile" class="text-[38px] dark:text-yellow-300 transition-colors duration-200 hover:scale-110">🌙</button>
+        </div>
+      </div>
+      <form action="" class="flex flex-col md:flex-row items-center w-full md:w-auto gap-2 md:gap-0 mt-2 md:mt-0">
         <input
           type="text"
           id="cityInput"
           placeholder="Location..."
-          class="h-[40px] w-[280px] px-4 text-gray-500 dark:text-gray-700 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-700" />
+          class="h-[40px] w-full md:w-[280px] px-4 text-gray-500 dark:text-gray-700 rounded-md border border-gray-300 dark:border-gray-700 shadow-sm placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-700 transition-all duration-200" />
 
         <button
           id="searchButton"
-          class="mx-[10px] h-[38px] px-[5px] bg-white dark:bg-gray-800 rounded-md text-blue-500 dark:text-blue-300 hover:bg-blue-700 dark:hover:bg-gray-700 hover:text-white dark:hover:text-blue-200 transition-colors duration-300">
+          class="h-[38px] px-[10px] mx-[10px] bg-white dark:bg-gray-800 rounded-md text-blue-500 dark:text-blue-300 hover:bg-blue-700 dark:hover:bg-gray-700 hover:text-white dark:hover:text-blue-200 transition-colors duration-300 focus:ring-2 focus:ring-blue-400 active:scale-95 w-full md:w-auto">
           Search
         </button>
       </form>
-      <div
-        class="mx-[20px] h-[50px] w-[50px] bg-white dark:bg-gray-800 rounded-full flex items-center justify-center transition-colors duration-300">
-        <button id="theme" class="text-[32px] dark:text-yellow-300">🌙</button>
+      <div class=" hidden md:flex mx-[20px] h-[50px] w-[50px] bg-white dark:bg-gray-800 rounded-full items-center justify-center transition-colors duration-300 hover:shadow-lg cursor-pointer">
+        <button id="theme-dekstop" class="text-[32px] dark:text-yellow-300 transition-colors duration-200 hover:scale-110">🌙</button>
       </div>
     </nav>
 
-    <main class="flex">
+    <main class="flex flex-col lg:flex-row p-4 gap-6">
+      <!-- Middle weather div first for mobile, reorder for desktop -->
       <div
-        class="mx-auto mt-10 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-8 flex flex-col items-center justify-center gap-6 w-full max-w-md transition-colors duration-300">
-        <h1
-          class="text-[30px] font-extrabold text-gray-800 dark:text-gray-100 tracking-wide mb-2">
-          Weather This Week 🌤️
-        </h1>
-        <table
-          id="forecastTable"
-          class="w-full text-center rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"></table>
-      </div>
-      <div
-        class="mx-auto mt-10 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-8 flex flex-col items-center gap-6 w-full max-w-md transition-colors duration-300">
-        <div id="code" class="text-[120px] drop-shadow-lg">🌤️</div>
+        class="order-1 lg:order-2 mx-auto mt-6 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-6 flex flex-col items-center gap-6 w-full max-w-md transition-colors duration-300 hover:shadow-xl">
+        <div id="code" class="text-[80px] md:text-[120px] drop-shadow-lg transition-transform duration-200 hover:scale-110">🌤️</div>
         <h1
           id="city"
-          class="text-[40px] text-center font-extrabold text-gray-800 dark:text-gray-100 tracking-wide mb-2">
+          class="text-[28px] md:text-[40px] text-center font-extrabold text-gray-800 dark:text-gray-100 tracking-wide mb-2 transition-colors duration-200">
           Delhi
         </h1>
         <p
           id="temperature"
-          class="text-[32px] font-semibold text-blue-600 dark:text-blue-300 mb-1">
+          class="text-[24px] md:text-[32px] font-semibold text-blue-600 dark:text-blue-300 mb-1 transition-colors duration-200">
           29°C
         </p>
         <p
           id="min-max"
-          class="text-[18px] text-gray-600 dark:text-gray-300 mb-2">
+          class="text-[16px] md:text-[18px] text-gray-600 dark:text-gray-300 mb-2">
           <span class="font-medium">Min:</span> 19°C &nbsp;&nbsp;
           <span class="font-medium">Max:</span> 29°C
         </p>
         <p
           id="rain"
-          class="text-[16px] text-blue-700 dark:text-blue-200 bg-blue-100 dark:bg-blue-900 rounded-lg px-4 py-2 shadow-sm">
+          class="text-[14px] md:text-[16px] text-blue-700 dark:text-blue-200 bg-blue-100 dark:bg-blue-900 rounded-lg px-4 py-2 shadow-sm transition-colors duration-200 hover:bg-blue-200 dark:hover:bg-blue-800">
           There's an 80% chance of rain—better carry an umbrella!
         </p>
       </div>
       <div
-        class="mx-auto mt-10 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-8 flex flex-col items-center justify-center gap-6 w-full max-w-md transition-colors duration-300">
+        class="order-2 lg:order-1 mx-auto mt-6 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-6 flex flex-col items-center justify-center gap-6 w-full max-w-md transition-colors duration-300 hover:shadow-xl">
         <h1
-          class="text-[28px] font-bold text-blue-700 dark:text-blue-300 tracking-wide mb-2 flex items-center gap-2">
-          <span class="text-[32px]">🕒</span> Local Time
+          class="text-[24px] md:text-[30px] font-extrabold text-gray-800 dark:text-gray-100 tracking-wide mb-2">
+          Weather This Week 🌤️
+        </h1>
+        <div class="w-full overflow-x-auto">
+          <table
+            id="forecastTable"
+            class="w-full text-center rounded-lg overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 transition-colors duration-300"></table>
+        </div>
+      </div>
+      <div
+        class="order-3 mx-auto mt-6 bg-gradient-to-br from-blue-400 via-blue-200 to-white dark:from-gray-800 dark:via-gray-700 dark:to-gray-900 shadow-2xl rounded-3xl border-none p-6 flex flex-col items-center justify-center gap-6 w-full max-w-md transition-colors duration-300 hover:shadow-xl">
+        <h1
+          class="text-[22px] md:text-[28px] font-bold text-blue-700 dark:text-blue-300 tracking-wide mb-2 flex items-center gap-2">
+          <span class="text-[28px] md:text-[32px]">🕒</span> Local Time
         </h1>
         <p
           id="localTime"
-          class="text-[28px] font-semibold text-gray-800 dark:text-gray-100 mb-4">
+          class="text-[22px] md:text-[28px] font-semibold text-gray-800 dark:text-gray-100 mb-4">
           12:00 PM
         </p>
         <h2
-          class="text-[22px] font-semibold text-blue-600 dark:text-blue-200 tracking-wide mb-2 mt-4 flex items-center gap-2">
-          <span class="text-[28px]">💭</span> Sky Says...
+          class="text-[18px] md:text-[22px] font-semibold text-blue-600 dark:text-blue-200 tracking-wide mb-2 mt-4 flex items-center gap-2">
+          <span class="text-[22px] md:text-[28px]">💭</span> Sky Says...
         </h2>
         <p
           id="skySays"
-          class="text-[18px] text-gray-700 dark:text-gray-300 text-center leading-relaxed bg-blue-50 dark:bg-gray-900 rounded-lg px-4 py-3 shadow-sm">
+          class="text-[16px] md:text-[18px] text-gray-700 dark:text-gray-300 text-center leading-relaxed bg-blue-50 dark:bg-gray-900 rounded-lg px-4 py-3 shadow-sm transition-colors duration-200 hover:bg-blue-100 dark:hover:bg-gray-800">
           The weather is looking great this week! Expect a mix of sunshine and
           clouds with mild temperatures.
         </p>
@@ -107,14 +114,25 @@
 
     <script>
       // Theme toggle functionality
-      const themeButton = document.getElementById("theme");
+      const themeButtonMobile = document.getElementById("theme-mobile")
+      
       const html = document.documentElement;
-      themeButton.addEventListener("click", () => {
+      themeButtonMobile.addEventListener("click", () => {
         html.classList.toggle("dark");
         if (html.classList.contains("dark")) {
           themeButton.textContent = "☀️"; // Change to sun icon
         } else {
           themeButton.textContent = "🌙"; // Change to moon icon
+        }
+      });
+
+      const themeButtonDekstop = document.getElementById("theme-dekstop");
+      themeButtonDekstop.addEventListener("click", () => {
+        html.classList.toggle("dark");
+        if (html.classList.contains("dark")) {
+          themeButtonDekstop.textContent = "☀️"; // Change to sun icon
+        } else {
+          themeButtonDekstop.textContent = "🌙"; // Change to moon icon
         }
       });
 
